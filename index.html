@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MITS Team Authentication</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #4f46e5;
+      --primary-hover: #4338ca;
+      --success-color: #059669;
+      --error-color: #dc2626;
+      --bg-color: #f8fafc;
+      --text-color: #1e293b;
+      --gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      --card-bg: rgba(255, 255, 255, 0.95);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-image: 
+        radial-gradient(at 40% 20%, hsla(250,100%,90%,1) 0px, transparent 50%),
+        radial-gradient(at 80% 0%, hsla(250,100%,90%,1) 0px, transparent 50%),
+        radial-gradient(at 0% 50%, hsla(250,100%,90%,1) 0px, transparent 50%);
+      animation: gradientShift 15s ease infinite;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container {
+      width: 100%;
+      max-width: 450px;
+      background: var(--card-bg);
+      padding: 2.5rem;
+      border-radius: 24px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      animation: slideUp 0.6s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .container:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 12px 40px rgba(79, 70, 229, 0.15);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: var(--primary-color);
+      font-size: 2.2rem;
+      font-weight: 700;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 1.5rem;
+      animation: slideIn 0.5s ease-out forwards;
+      opacity: 0;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .input-group:nth-child(1) { animation-delay: 0.1s; }
+    .input-group:nth-child(2) { animation-delay: 0.2s; }
+    .input-group:nth-child(3) { animation-delay: 0.3s; }
+
+    .input-group i {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      transition: all 0.3s ease;
+    }
+
+    input {
+      width: 100%;
+      padding: 1.2rem 1rem 1.2rem 3rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 16px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+      transform: translateY(-2px);
+    }
+
+    input:focus + i {
+      color: var(--primary-color);
+    }
+
+    button {
+      width: 100%;
+      padding: 1.2rem;
+      border: none;
+      border-radius: 16px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #submitBtn {
+      background: var(--gradient);
+      color: white;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 15px rgba(79, 70, 229, 0.2);
+    }
+
+    #submitBtn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(79, 70, 229, 0.3);
+    }
+
+    #submitBtn:active {
+      transform: translateY(-1px);
+    }
+
+    .toggle-btn {
+      background: none;
+      color: var(--primary-color);
+      text-decoration: none;
+      font-size: 1rem;
+      padding: 0.8rem;
+      position: relative;
+    }
+
+    .toggle-btn::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 50%;
+      background: var(--primary-color);
+      transition: all 0.3s ease;
+    }
+
+    .toggle-btn:hover::after {
+      width: 100%;
+      left: 0;
+    }
+
+    .message {
+      text-align: center;
+      margin: 1rem 0;
+      padding: 1rem;
+      border-radius: 12px;
+      font-weight: 500;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .success {
+      background: rgba(5, 150, 105, 0.1);
+      color: var(--success-color);
+      border: 1px solid rgba(5, 150, 105, 0.2);
+    }
+
+    .error {
+      background: rgba(220, 38, 38, 0.1);
+      color: var(--error-color);
+      border: 1px solid rgba(220, 38, 38, 0.2);
+    }
+
+    #dashboardBtn, #logoutBtn {
+      background: var(--primary-color);
+      color: white;
+      margin-top: 1rem;
+      box-shadow: 0 4px 15px rgba(79, 70, 229, 0.2);
+    }
+
+    #dashboardBtn:hover, #logoutBtn:hover {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(79, 70, 229, 0.3);
+    }
+
+    /* Loading animation */
+    .loading {
+      position: relative;
+    }
+
+    .loading::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      top: 50%;
+      left: 50%;
+      margin: -10px 0 0 -10px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2 id="formTitle">Welcome Back!</h2>
+
+  <form id="authForm">
+    <div class="input-group">
+      <i class="fas fa-user"></i>
+      <input type="text" id="name" placeholder="Full Name" style="display: none;" />
+    </div>
+    <div class="input-group">
+      <i class="fas fa-envelope"></i>
+      <input type="email" id="email" placeholder="Email" required />
+    </div>
+    <div class="input-group">
+      <i class="fas fa-lock"></i>
+      <input type="password" id="password" placeholder="Password" required />
+    </div>
+    <button type="submit" id="submitBtn">Login</button>
+    <button type="button" class="toggle-btn" onclick="toggleForm()">Don't have an account? Register</button>
+    <p class="message" id="statusMsg"></p>
+  </form>
+
+  <button id="dashboardBtn" style="display:none;" onclick="getDashboard()">Access Dashboard</button>
+  <button id="logoutBtn" style="display:none;" onclick="logout()">Logout</button>
+</div>
+
+<script>
+  // JavaScript code remains the same
+  let isLogin = true;
+
+  function toggleForm() {
+    isLogin = !isLogin;
+    const nameField = document.getElementById('name');
+    const title = document.getElementById('formTitle');
+    const btn = document.getElementById('submitBtn');
+    const toggle = document.querySelector('.toggle-btn');
+
+    if (isLogin) {
+      nameField.style.display = 'none';
+      title.textContent = 'Login';
+      btn.textContent = 'Login';
+      toggle.textContent = "Don't have an account? Register";
+    } else {
+      nameField.style.display = 'block';
+      title.textContent = 'Register';
+      btn.textContent = 'Register';
+      toggle.textContent = "Already have an account? Login";
+    }
+  }
+
+  document.getElementById('authForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+    const status = document.getElementById('statusMsg');
+
+    const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
+
+    try {
+      const res = await fetch(`http://localhost:5000${endpoint}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ name, email, password })
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        status.className = 'message success';
+        status.textContent = data.message || (isLogin ? 'Login successful!' : 'Registration successful!');
+        document.getElementById('authForm').reset();
+        document.getElementById('dashboardBtn').style.display = 'block';
+        document.getElementById('logoutBtn').style.display = 'block';
+      } else {
+        throw new Error(data.message || 'Something went wrong.');
+      }
+    } catch (err) {
+      status.className = 'message error';
+      status.textContent = err.message;
+    }
+  });
+
+  async function getDashboard() {
+    const status = document.getElementById('statusMsg');
+    try {
+      const res = await fetch('http://localhost:5000/api/auth/dashboard', {
+        method: 'GET',
+        credentials: 'include'
+      });
+      const data = await res.json();
+      if (res.ok) {
+        status.className = 'message success';
+        status.textContent = data.message || 'Welcome to your dashboard!';
+      } else {
+        throw new Error(data.message || 'Not authorized');
+      }
+    } catch (err) {
+      status.className = 'message error';
+      status.textContent = err.message;
+    }
+  }
+
+  async function logout() {
+    const status = document.getElementById('statusMsg');
+    try {
+      await fetch('http://localhost:5000/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include'
+      });
+      status.className = 'message success';
+      status.textContent = 'Logged out successfully';
+      document.getElementById('dashboardBtn').style.display = 'none';
+      document.getElementById('logoutBtn').style.display = 'none';
+    } catch {
+      status.className = 'message error';
+      status.textContent = 'Logout failed';
+    }
+  }
+</script>
+
+</body>
+</html>
